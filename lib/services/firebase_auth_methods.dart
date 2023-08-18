@@ -51,27 +51,25 @@ class FirebaseAuthMethods {
     }
   }
 
-  //GOOGLE SIGN IN
+//SIGN IN WITH GOOGLE
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
-      if (googleAuth?.accessToken != null && googleAuth?.idToken != null) {
-        //CREATE A NEW CREDENTIAL
-        final credential = GoogleAuthProvider.credential(
-          idToken: googleAuth?.idToken,
-          accessToken: googleAuth?.accessToken,
-        );
-        UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
-        // if(userCredential.user != null) {
-        //   if(userCredential.additionalUserInfo!.isNewUser) {}
-        // }
-      }
-    } on FirebaseAuthException catch (e) {
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      print(userCredential);
+      // return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseException catch (e) {
       showSnackBar(context, e.message!);
     }
+    return null;
   }
 
   //PHONE SIGN IN
