@@ -8,6 +8,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 class FirebaseAuthMethods {
   final FirebaseAuth _auth;
   FirebaseAuthMethods(this._auth);
+  User get user => _auth.currentUser!;
+  //STATE PERSISTENCE
+  Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
   //EMAIL SIGN UP
   Future<void> signUpWithEmail({
     required String email,
@@ -128,6 +131,24 @@ class FirebaseAuthMethods {
   Future<void> signInAnonymously(BuildContext context) async {
     try {
       await _auth.signInAnonymously();
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message!);
+    }
+  }
+
+  //SIGN OUT
+  Future<void> signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message!);
+    }
+  }
+
+  //LOG OUT
+  Future<void> deleteAccount(BuildContext context) async {
+    try {
+      await _auth.currentUser!.delete();
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!);
     }
