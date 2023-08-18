@@ -123,4 +123,13 @@ class FirebaseAuthMethods {
       );
     }
   }
+
+  //ANONYMOUS SIGN IN
+  Future<void> signInAnonymously(BuildContext context) async {
+    try {
+      await _auth.signInAnonymously();
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message!);
+    }
+  }
 }
